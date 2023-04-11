@@ -686,9 +686,7 @@ class LightspeedRetailApi {
   
   getRegisters(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Register.json`;
-    return new RetailApiCursor(url, 'Register', this, {
-      load_relations: '["all"]',
-    });
+    return new RetailApiCursor(url, 'Register', this, {});
   }
 
   getPaymentTypes(accountId) {
