@@ -9,7 +9,8 @@
     "test": "jest --env=node",
     "build": "npx tsc",
     "check": "prettier --check src",
-    "lint": "prettier --write src"
+    "lint": "prettier --write src",
+    "prepare": "npm run build"
   },
   "repository": {
     "type": "git",
