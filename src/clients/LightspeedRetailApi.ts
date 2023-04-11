@@ -688,6 +688,11 @@ class LightspeedRetailApi {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Register.json`;
     return new RetailApiCursor(url, 'Register', this, {});
   }
+  
+  getEmployees(accountId) {
+    const url = `https://api.merchantos.com/API/Account/${accountId}/Employee.json`;
+    return new RetailApiCursor(url, 'Employee', this, {});
+  }
 
   getPaymentTypes(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/PaymentType.json`;
