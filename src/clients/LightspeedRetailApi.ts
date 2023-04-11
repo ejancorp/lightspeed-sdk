@@ -691,7 +691,9 @@ class LightspeedRetailApi {
   
   getEmployees(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Employee.json`;
-    return new RetailApiCursor(url, 'Employee', this, {});
+    return new RetailApiCursor(url, 'Employee', this, {
+      load_relations: '["Contact", "EmployeeRole", "EmployeeRole.EmployeeRights", "EmployeeRights"]'
+    });
   }
 
   getPaymentTypes(accountId) {
