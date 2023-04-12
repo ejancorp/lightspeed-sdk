@@ -288,6 +288,23 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST PAYMENT METHOD', err);
     }
   }
+  
+  async postCategory(accountId, category) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Category.json`;
+
+    const options = {
+      method: 'POST',
+      url,
+      data: category,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data;
+    } catch (err) {
+      return this.handleResponseError('POST CATEGORY METHOD', err);
+    }
+  }
 
   async postCustomerCustomField(accountId, customField) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/CustomField.json`;
