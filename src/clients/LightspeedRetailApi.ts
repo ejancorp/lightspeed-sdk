@@ -683,6 +683,11 @@ class LightspeedRetailApi {
       return this.handleResponseError(`GET ITEM BY ID ${itemId}`, err);
     }
   }
+  
+  getCustomerCustomFields(accountId) {
+    const url = `https://api.merchantos.com/API/Account/${accountId}/Customer/CustomField.json`;
+    return new RetailApiCursor(url, 'CustomField', this);
+  }
 
   getCategories(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Category.json`;
