@@ -183,6 +183,22 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST ITEM', err);
     }
   }
+  
+  async anonymizeCustomer(accountId: number | string, customerId: number | string): Promise<Customer | never> {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}/Anonymize.json`;
+
+    const options = {
+      method: 'DELETE',
+      url
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Customer;
+    } catch (err) {
+      return this.handleResponseError('ARCHIVE AND ANONYMIZE CUSTOMER', err);
+    }
+  }
 
   async postCustomer(
     accountId: number | string,
