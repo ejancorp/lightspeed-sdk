@@ -184,6 +184,22 @@ class LightspeedRetailApi {
     }
   }
   
+  async archiveItem(accountId: number | string, itemId: number | string): Promise<Item | never> {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Item/${itemId}.json`;
+
+    const options = {
+      method: 'DELETE',
+      url
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Customer;
+    } catch (err) {
+      return this.handleResponseError('ARCHIVE ITEM', err);
+    }
+  }
+  
   async anonymizeCustomer(accountId: number | string, customerId: number | string): Promise<Customer | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}/Anonymize.json`;
 
