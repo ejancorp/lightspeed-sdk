@@ -718,7 +718,7 @@ class LightspeedRetailApi {
   getItems(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Item.json`;
     return new RetailApiCursor(url, 'Item', this, {
-      load_relations: '["ItemShops", "Images", "Manufacturer"]',
+      load_relations: '["ItemShops", "Images", "Manufacturer", "Category", "TaxClass"]',
     });
   }
   
