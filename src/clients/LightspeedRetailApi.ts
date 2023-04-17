@@ -700,6 +700,11 @@ class LightspeedRetailApi {
     }
   }
   
+  getItemCustomFields(accountId) {
+    const url = `https://api.merchantos.com/API/Account/${accountId}/Item/CustomField.json`;
+    return new RetailApiCursor(url, 'CustomField', this);
+  }
+  
   getCustomerCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Customer/CustomField.json`;
     return new RetailApiCursor(url, 'CustomField', this);
