@@ -745,7 +745,7 @@ class LightspeedRetailApi {
   ): RetailApiCursor<Customer> {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Customer.json`;
     return new RetailApiCursor(url, 'Customer', this, {
-      load_relations: '["Contact", "CustomFieldValues"]',
+      load_relations: '["Contact", "CustomerType", "Discount", "Note", "CreditAccount", "TaxCategory", "CustomFieldValues"]',
       ...searchParamsToQueryParams(customersSearchParams),
     });
   }
