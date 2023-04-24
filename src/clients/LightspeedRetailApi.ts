@@ -200,6 +200,22 @@ class LightspeedRetailApi {
     }
   }
   
+  async deleteDiscount(accountId: number | string, discountId: number | string): Promise<Item | never> {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Discount/${discountId}.json`;
+
+    const options = {
+      method: 'DELETE',
+      url
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Discount;
+    } catch (err) {
+      return this.handleResponseError('DELETE DISCOUNT', err);
+    }
+  }
+  
   async anonymizeCustomer(accountId: number | string, customerId: number | string): Promise<Customer | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}/Anonymize.json`;
 
