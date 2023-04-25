@@ -216,6 +216,22 @@ class LightspeedRetailApi {
     }
   }
   
+  async deletePaymentType(accountId: number | string, paymentTypeId: number | string): Promise<Item | never> {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/PaymentType/${paymentTypeId}.json`;
+
+    const options = {
+      method: 'DELETE',
+      url
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.PaymentType;
+    } catch (err) {
+      return this.handleResponseError('DELETE PAYMENT TYPE', err);
+    }
+  }
+  
   async anonymizeCustomer(accountId: number | string, customerId: number | string): Promise<Customer | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}/Anonymize.json`;
 
