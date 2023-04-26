@@ -782,6 +782,22 @@ class LightspeedRetailApi {
     }
   }
   
+  async getRegisterById(accountId, registerId) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Register/${registerId}.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Register;
+    } catch (err) {
+      return this.handleResponseError('GET REGISTER', err);
+    }
+  }
+  
   getItemCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Item/CustomField.json`;
     return new RetailApiCursor(url, 'CustomField', this);
