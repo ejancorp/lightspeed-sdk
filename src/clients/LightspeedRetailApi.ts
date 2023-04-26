@@ -403,6 +403,23 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST OPEN REGISTER METHOD', err);
     }
   }
+  
+  async closeRegister(accountId, registerId, fields) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Register/${registerId}/close.json`;
+
+    const options = {
+      method: 'POST',
+      url,
+      data: fields,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data;
+    } catch (err) {
+      return this.handleResponseError('POST CLOSE REGISTER METHOD', err);
+    }
+  }
 
   async postCustomerCustomField(accountId, customField) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/CustomField.json`;
