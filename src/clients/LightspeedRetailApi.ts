@@ -691,18 +691,28 @@ class LightspeedRetailApi {
     }
   }
 
-  async getCustomerByID(accountId, customerID) {
-    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerID}.json?load_relations=["all"]`;
-
+  async getCustomerByID(
+    accountId,
+    customerId,
+    loadRelations = [
+      'ItemShops',
+      'Images',
+      'Manufacturer',
+      'CustomFieldValues',
+      'CustomFieldValues.value',
+    ]
+  ) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}.json?load_relations=${querystring.escape(JSON.stringify(loadRelations))}`;
+  
     const options = {
       method: 'GET',
       url,
     };
-
+  
     try {
       const response = await this.performRequest(options);
-      return response.data;
-    } catch (err) {
+      return response.data.Customer;
+    } catch(err) {
       return this.handleResponseError('GET CUSTOMER', err);
     }
   }
