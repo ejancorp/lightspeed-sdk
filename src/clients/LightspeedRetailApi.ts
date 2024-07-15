@@ -692,7 +692,7 @@ class LightspeedRetailApi {
   }
 
   async getCustomerByID(accountId, customerID) {
-    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerID}.json?load_relations=["CustomFieldValues", "CustomFieldValues.value", "CustomerType"]`;
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerID}.json?load_relations=["all"]`;
 
     const options = {
       method: 'GET',
