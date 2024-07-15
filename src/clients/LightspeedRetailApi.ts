@@ -695,11 +695,11 @@ class LightspeedRetailApi {
     accountId,
     customerId,
     loadRelations = [
-      'ItemShops',
-      'Images',
-      'Manufacturer',
+      'CustomerType',
+      'CreditAccount',
       'CustomFieldValues',
       'CustomFieldValues.value',
+      'Note'
     ]
   ) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}.json?load_relations=${querystring.escape(JSON.stringify(loadRelations))}`;
