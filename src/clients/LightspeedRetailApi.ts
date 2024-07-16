@@ -559,8 +559,14 @@ class LightspeedRetailApi {
       load_relations: JSON.stringify([
         'TaxCategory',
         'SaleLines',
+        'SaleLines.Item',
+        'SaleLines.Note',
         'SalePayments',
         'SalePayments.PaymentType',
+        'Customer',
+        'Discount',
+        'Customer.Contact',
+        'SaleNotes'
       ]),
     };
     const url = `https://api.merchantos.com/API/Account/${accountId}/Sale/${saleId}.json?${querystring.stringify(
