@@ -830,6 +830,22 @@ class LightspeedRetailApi {
       return this.handleResponseError('GET REGISTER', err);
     }
   }
+
+async getEmployeeById(accountId, employeeId) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Employee/${employeeId}.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Employee;
+    } catch (err) {
+      return this.handleResponseError('GET REGISTER', err);
+    }
+  }
   
   getItemCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Item/CustomField.json`;
