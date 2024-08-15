@@ -347,7 +347,7 @@ class LightspeedRetailApi {
 
     try {
       const response = await this.performRequest(options);
-      return response.data;
+      return response.data.PaymentType;
     } catch (err) {
       return this.handleResponseError('POST PAYMENT METHOD', err);
     }
