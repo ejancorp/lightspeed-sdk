@@ -364,7 +364,7 @@ class LightspeedRetailApi {
 
     try {
       const response = await this.performRequest(options);
-      return response.data;
+      return response.data.Category;
     } catch (err) {
       return this.handleResponseError('POST CATEGORY METHOD', err);
     }
