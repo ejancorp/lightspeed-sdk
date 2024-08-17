@@ -848,7 +848,7 @@ async getEmployeeById(accountId, employeeId) {
   }
 
   async getItemCustomFieldByID(accountId, customFieldId) {
-    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Item/${customFieldId}.json`;
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Item/CustomField/${customFieldId}.json`;
 
     const options = {
       method: 'GET',
