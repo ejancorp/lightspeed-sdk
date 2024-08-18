@@ -862,6 +862,22 @@ async getEmployeeById(accountId, employeeId) {
       return this.handleResponseError('GET ITEM Custom Field', err);
     }
   }
+
+  async getCustomerCustomFieldByID(accountId, customFieldId) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/CustomField/${customFieldId}.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.CustomField;
+    } catch (err) {
+      return this.handleResponseError('GET Customer Custom Field', err);
+    }
+  }
   
   getItemCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Item/CustomField.json`;
