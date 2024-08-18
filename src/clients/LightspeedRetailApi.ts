@@ -927,6 +927,22 @@ async getEmployeeById(accountId, employeeId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/CustomerType.json`;
     return new RetailApiCursor(url, 'CustomerType', this);
   }
+
+  async getCustomerTypeByID(accountId, customerTypeID) {
+    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/CustomerType/${customerTypeID}.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.CustomerType;
+    } catch (err) {
+      return this.handleResponseError('GET CUSTOMER TYPE', err);
+    }
+  }
 }
 
 export default LightspeedRetailApi;
