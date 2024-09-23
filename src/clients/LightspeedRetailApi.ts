@@ -940,6 +940,13 @@ async getEmployeeById(accountId, employeeId) {
     });
   }
 
+  getQuotes(accountId) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Quote.json`;
+    return new RetailApiCursor(url, 'Quote', this, {
+      load_relations: 'all'
+    });
+  }
+
   getPaymentTypes(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/PaymentType.json`;
     return new RetailApiCursor<PaymentType>(url, 'PaymentType', this, {});
