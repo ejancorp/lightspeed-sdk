@@ -285,6 +285,23 @@ class LightspeedRetailApi {
     }
   }
 
+  async postQuote(accountId, quote) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Quote.json`;
+
+    const options = {
+      method: 'POST',
+      url,
+      data: quote,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Quote;
+    } catch (err) {
+      return this.handleResponseError('POST QUOTE', err);
+    }
+  }
+
   async postItemAttributeSet(accountId, attributeSet) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/ItemAttributeSet.json`;
 
