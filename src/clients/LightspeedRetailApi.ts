@@ -983,6 +983,22 @@ async getEmployeeById(accountId, employeeId) {
       return this.handleResponseError('GET CUSTOMER TYPE', err);
     }
   }
+
+  async getQuoteByID(accountId, quoteID) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Quote/${quoteID}.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Quote;
+    } catch (err) {
+      return this.handleResponseError('GET QUOTE', err);
+    }
+  }
 }
 
 export default LightspeedRetailApi;
