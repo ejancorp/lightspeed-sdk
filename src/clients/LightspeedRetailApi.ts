@@ -977,7 +977,7 @@ async getEmployeeById(accountId, employeeId) {
     return new RetailApiCursor(url, 'Customer', this, {
       load_relations: '["Contact", "CustomerType", "Discount", "Note", "CreditAccount", "TaxCategory", "CustomFieldValues"]',
       ...searchParamsToQueryParams(customersSearchParams),
-    });
+    }, true);
   }
 
   getCustomerTypes(accountId) {
