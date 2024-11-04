@@ -973,7 +973,7 @@ async getEmployeeById(accountId, employeeId) {
     accountId,
     customersSearchParams: CustomerSearchParams = {}
   ): RetailApiCursor<Customer> {
-    const url = `https://api.merchantos.com/API/Account/${accountId}/Customer.json?orderby_desc=1`;
+    const url = `https://api.merchantos.com/API/Account/${accountId}/Customer.json?orderby_desc=1&orderby=customerID`;
     return new RetailApiCursor(url, 'Customer', this, {
       load_relations: '["Contact", "CustomerType", "Discount", "Note", "CreditAccount", "TaxCategory", "CustomFieldValues"]',
       ...searchParamsToQueryParams(customersSearchParams),
