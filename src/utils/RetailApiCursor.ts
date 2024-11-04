@@ -5,16 +5,12 @@ class RetailApiCursor<T = any> {
   private readonly resource: string;
   private readonly instance: any;
   private readonly queryString: Record<string, string>;
-  private readonly orderby: any;
-  private readonly orderbyDesc: any;
 
-  constructor(baseUrl, resource, instance, queryString = {}, orderby = null, orderbyDesc = null) {
+  constructor(baseUrl, resource, instance, queryString = {}) {
     this.baseUrl = baseUrl;
     this.resource = resource;
     this.instance = instance;
     this.queryString = queryString;
-    this.orderby = orderby;
-    this.orderbyDesc = orderbyDesc;
   }
 
   async toArray(): Promise<T[]> {
@@ -33,26 +29,19 @@ class RetailApiCursor<T = any> {
     const resource = this.resource;
     const lsInstance = this.instance;
 
-    let ordering = {};
-    if (this.orderby) {
-      ordering = { [this.orderby] : this.orderbyDesc || 0 };
-    }
-      
     while (keepFetching) {
       let url = '';
       if (this.baseUrl.includes('?')) {
         url = `${this.baseUrl}&${querystring.stringify({
           ...this.queryString,
           offset,
-          limit,
-          ...ordering
+          limit
         })}`;
       } else {
         url = `${this.baseUrl}?${querystring.stringify({
           ...this.queryString,
           offset,
-          limit,
-          ...ordering
+          limit
         })}`;
       }
 
