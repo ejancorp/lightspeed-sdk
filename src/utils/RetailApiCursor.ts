@@ -33,9 +33,9 @@ class RetailApiCursor<T = any> {
     const resource = this.resource;
     const lsInstance = this.instance;
 
-    let ordering = {}
+    let ordering = {};
     if (this.orderby) {
-      ordering = { [this.orderby] = this.orderbyDesc || 0 }
+      ordering = { [this.orderby] : this.orderbyDesc || 0 };
     }
       
     while (keepFetching) {
