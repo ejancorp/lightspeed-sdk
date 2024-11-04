@@ -26,7 +26,7 @@ class RetailApiCursor<T = any> {
 
   async *[Symbol.asyncIterator](): AsyncGenerator<T, string, boolean> {
     let offset = 0;
-    const limit = 100;
+    const limit = 20;
     let keepFetching = true;
     const resource = this.resource;
     const lsInstance = this.instance;
