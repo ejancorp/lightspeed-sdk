@@ -5,12 +5,14 @@ class RetailApiCursor<T = any> {
   private readonly resource: string;
   private readonly instance: any;
   private readonly queryString: Record<string, string>;
-
-  constructor(baseUrl, resource, instance, queryString = {}) {
+  private readonly firstPageOnly: any;
+  
+  constructor(baseUrl, resource, instance, queryString = {}, firstPageOnly = false) {
     this.baseUrl = baseUrl;
     this.resource = resource;
     this.instance = instance;
     this.queryString = queryString;
+    this.firstPageOnly = firstPageOnly;
   }
 
   async toArray(): Promise<T[]> {
@@ -74,6 +76,9 @@ class RetailApiCursor<T = any> {
           keepFetching = false;
         } else {
           offset = offset + limit;
+        }
+        if (this.firstPageOnly) {
+          keepFetching = false;
         }
       } catch (err) {
         console.log(err);
