@@ -19,10 +19,16 @@ const FormData = require('form-data');
 
 const { sleep } = require('../utils/timeUtils');
 
+type TokenCacher = {
+  getToken: (tokenKey: string) => Promise<string>
+  setToken: (tokenKey: string, token: string) => Promise<void>
+}
+
 type ConstructorOptions = {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
+  tokenCacher?: TokenCacher | null
 };
 
 interface SearchParams {
@@ -77,14 +83,20 @@ class LightspeedRetailApi {
   private readonly clientId: string;
   private readonly clientSecret: string;
   private refreshToken: string;
+  private tokenCacher: TokenCacher | null;
+
 
   constructor(opts: ConstructorOptions) {
-    const { clientId, clientSecret, refreshToken } = opts;
+    const { clientId, clientSecret, refreshToken, tokenCacher } = opts;
 
     this.lastResponse = null;
     this.clientId = clientId;
     this.clientSecret = clientSecret;
     this.refreshToken = refreshToken;
+
+    if (tokenCacher) {
+      this.tokenCacher = tokenCacher;
+    }
   }
 
   private handleResponseError(msg, err): never {
@@ -123,10 +135,22 @@ class LightspeedRetailApi {
 
     // Regenerate token
     // TODO: We are generating a new token on every request, we should probably only do that if its expired.
-    const token = (await this.getToken()).access_token;
+
+    let cachedToken = null
+    if (this.tokenCacher) {
+      cachedToken = await this.tokenCacher.getToken(this.refreshToken);
+    }
+
+    const token = cachedToken || (await this.getToken()).access_token;
     if (!token) {
       throw new Error('Error fetching token');
     }
+
+    if (!cachedToken && this.tokenCacher) {
+      this.tokenCacher.setToken(this.refreshToken, token)
+    }
+
+    console.log(`Using token...... ${token}`);
 
     options.headers = { Authorization: `Bearer ${token}` };
 
@@ -183,7 +207,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST ITEM', err);
     }
   }
-  
+
   async archiveItem(accountId: number | string, itemId: number | string): Promise<Item | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Item/${itemId}.json`;
 
@@ -199,7 +223,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('ARCHIVE ITEM', err);
     }
   }
-  
+
   async deleteDiscount(accountId: number | string, discountId: number | string): Promise<Item | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Discount/${discountId}.json`;
 
@@ -215,7 +239,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('DELETE DISCOUNT', err);
     }
   }
-  
+
   async deletePaymentType(accountId: number | string, paymentTypeId: number | string): Promise<Item | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/PaymentType/${paymentTypeId}.json`;
 
@@ -231,7 +255,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('DELETE PAYMENT TYPE', err);
     }
   }
-  
+
   async anonymizeCustomer(accountId: number | string, customerId: number | string): Promise<Customer | never> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}/Anonymize.json`;
 
@@ -369,7 +393,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST PAYMENT METHOD', err);
     }
   }
-  
+
   async postCategory(accountId, category) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Category.json`;
 
@@ -386,7 +410,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST CATEGORY METHOD', err);
     }
   }
-  
+
   async postDiscount(accountId, discount) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Discount.json`;
 
@@ -403,7 +427,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST DISCOUNT METHOD', err);
     }
   }
-  
+
   async openRegister(accountId, registerId, fields) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Register/${registerId}/open.json`;
 
@@ -420,7 +444,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('POST OPEN REGISTER METHOD', err);
     }
   }
-  
+
   async closeRegister(accountId, registerId, fields) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Register/${registerId}/close.json`;
 
@@ -488,7 +512,7 @@ class LightspeedRetailApi {
       return this.handleResponseError('PUT SALE', err);
     }
   }
-  
+
   async putItem(accountId, item, ID) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Item/${ID}.json`;
 
@@ -743,16 +767,16 @@ class LightspeedRetailApi {
     ]
   ) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Customer/${customerId}.json?load_relations=${querystring.escape(JSON.stringify(loadRelations))}`;
-  
+
     const options = {
       method: 'GET',
       url,
     };
-  
+
     try {
       const response = await this.performRequest(options);
       return response.data.Customer;
-    } catch(err) {
+    } catch (err) {
       return this.handleResponseError('GET CUSTOMER', err);
     }
   }
@@ -848,7 +872,7 @@ class LightspeedRetailApi {
       return this.handleResponseError(`GET ITEM BY ID ${itemId}`, err);
     }
   }
-  
+
   async getRegisterById(accountId, registerId) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Register/${registerId}.json`;
 
@@ -865,7 +889,7 @@ class LightspeedRetailApi {
     }
   }
 
-async getEmployeeById(accountId, employeeId) {
+  async getEmployeeById(accountId, employeeId) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Employee/${employeeId}.json`;
 
     const options = {
@@ -912,17 +936,17 @@ async getEmployeeById(accountId, employeeId) {
       return this.handleResponseError('GET Customer Custom Field', err);
     }
   }
-  
+
   getItemCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Item/CustomField.json`;
     return new RetailApiCursor(url, 'CustomField', this);
   }
-  
+
   getCustomerCustomFields(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Customer/CustomField.json`;
     return new RetailApiCursor(url, 'CustomField', this);
   }
-  
+
   getDiscounts(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Discount.json`;
     return new RetailApiCursor(url, 'Discount', this);
@@ -944,12 +968,12 @@ async getEmployeeById(accountId, employeeId) {
       load_relations: '["ItemShops", "Images", "Manufacturer", "Category", "TaxClass", "CustomFieldValues"]',
     });
   }
-  
+
   getRegisters(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Register.json`;
     return new RetailApiCursor(url, 'Register', this, {});
   }
-  
+
   getEmployees(accountId) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Employee.json`;
     return new RetailApiCursor(url, 'Employee', this, {
