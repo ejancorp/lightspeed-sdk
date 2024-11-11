@@ -20,7 +20,7 @@ const FormData = require('form-data');
 const { sleep } = require('../utils/timeUtils');
 
 type TokenCacher = {
-  getToken: (tokenKey: string) => Promise<string>
+  getToken: (tokenKey: string) => Promise<string | null>
   setToken: (tokenKey: string, token: string) => Promise<void>
 }
 
