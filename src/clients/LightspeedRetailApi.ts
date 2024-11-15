@@ -134,7 +134,6 @@ class LightspeedRetailApi {
     await this.handleRateLimit(options);
 
     // Regenerate token
-    // TODO: We are generating a new token on every request, we should probably only do that if its expired.
 
     let cachedToken = null
     if (this.tokenCacher) {
@@ -185,6 +184,7 @@ class LightspeedRetailApi {
 
     try {
       const response = await axios(options);
+      console.log(`Fresh New Token...`, { ...response.data })
       return response.data;
     } catch (err) {
       return this.handleResponseError('GET TOKEN', err);
