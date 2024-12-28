@@ -490,7 +490,7 @@ class LightspeedRetailApi {
   }
 
   async refundSale(accountId, saleId, sale: PostSale): Promise<Sale> {
-    const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Sale/${saleId}/refund.json`;
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Sale/${saleId}/refund.json`;
 
     const options = {
       method: 'POST',
