@@ -597,12 +597,12 @@ class LightspeedRetailApi {
     });
   }
 
-  getSales(accountId, firstPageOnly = false) {
+  getSales(accountId, firstPageOnly = false, limit = 100) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Sale.json`;
     return new RetailApiCursor(url, 'Sale', this, {
       load_relations:
         '["TaxCategory","SaleLines","SaleLines.Item", "SaleLines.Note","SalePayments","SalePayments.PaymentType","Customer","Discount","Customer.Contact","SaleNotes"]',
-    }, firstPageOnly);
+    }, firstPageOnly, limit);
   }
 
   public async getSale(accountId, saleId) {
