@@ -5,14 +5,16 @@ class RetailApiCursor<T = any> {
   private readonly resource: string;
   private readonly instance: any;
   private readonly queryString: Record<string, string>;
-  private readonly firstPageOnly: any;
+  private readonly firstPageOnly: boolean;
+  private readonly limit: number;
   
-  constructor(baseUrl, resource, instance, queryString = {}, firstPageOnly = false) {
+  constructor(baseUrl, resource, instance, queryString = {}, firstPageOnly = false, limit = 100) {
     this.baseUrl = baseUrl;
     this.resource = resource;
     this.instance = instance;
     this.queryString = queryString;
     this.firstPageOnly = firstPageOnly;
+    this.limit = limit;
   }
 
   async toArray(): Promise<T[]> {
@@ -26,7 +28,7 @@ class RetailApiCursor<T = any> {
 
   async *[Symbol.asyncIterator](): AsyncGenerator<T, string, boolean> {
     let offset = 0;
-    const limit = 100;
+    const limit = this.limit || 100;
     let keepFetching = true;
     const resource = this.resource;
     const lsInstance = this.instance;
