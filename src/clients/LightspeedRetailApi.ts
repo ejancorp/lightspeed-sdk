@@ -472,6 +472,23 @@ class LightspeedRetailApi {
     }
   }
 
+  async putQuote(accountId, quoteId, quote) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Quote/${quoteId}.json`;
+
+    const options = {
+      method: 'PUT',
+      url,
+      data: quote,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Quote;
+    } catch (err) {
+      return this.handleResponseError('PUT QUOTE', err);
+    }
+  }
+
   async putSale(accountId, saleId, sale: PostSale): Promise<Sale> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Sale/${saleId}.json`;
 
