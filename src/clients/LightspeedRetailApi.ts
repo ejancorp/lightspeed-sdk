@@ -496,11 +496,45 @@ class LightspeedRetailApi {
     }
   }
 
+  async putQuote(accountId, quoteId, quote) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Quote/${quoteId}.json`;
+
+    const options = {
+      method: 'PUT',
+      url,
+      data: quote,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Quote;
+    } catch (err) {
+      return this.handleResponseError('PUT QUOTE', err);
+    }
+  }
+
   async putSale(accountId, saleId, sale: PostSale): Promise<Sale> {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Sale/${saleId}.json`;
 
     const options = {
       method: 'PUT',
+      url,
+      data: sale,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.Sale as Sale;
+    } catch (err) {
+      return this.handleResponseError('PUT SALE', err);
+    }
+  }
+
+  async refundSale(accountId, saleId, sale: PostSale): Promise<Sale> {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Sale/${saleId}/refund.json`;
+
+    const options = {
+      method: 'POST',
       url,
       data: sale,
     };
@@ -604,12 +638,12 @@ class LightspeedRetailApi {
     });
   }
 
-  getSales(accountId) {
+  getSales(accountId, firstPageOnly = false, limit = 100) {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Sale.json`;
     return new RetailApiCursor(url, 'Sale', this, {
       load_relations:
         '["TaxCategory","SaleLines","SaleLines.Item", "SaleLines.Note","SalePayments","SalePayments.PaymentType","Customer","Discount","Customer.Contact","SaleNotes"]',
-    });
+    }, firstPageOnly, limit);
   }
 
   public async getSale(accountId, saleId) {
@@ -996,13 +1030,14 @@ class LightspeedRetailApi {
   getCustomers(
     accountId,
     customersSearchParams: CustomerSearchParams = {},
-    firstPageOnly = false
+    firstPageOnly = false,
+    limit = 100
   ): RetailApiCursor<Customer> {
     const url = `https://api.merchantos.com/API/Account/${accountId}/Customer.json?orderby_desc=1&orderby=customerID`;
     return new RetailApiCursor(url, 'Customer', this, {
       load_relations: '["Contact", "CustomerType", "Discount", "Note", "CreditAccount", "TaxCategory", "CustomFieldValues"]',
       ...searchParamsToQueryParams(customersSearchParams),
-    }, firstPageOnly);
+    }, firstPageOnly, limit);
   }
 
   getCustomerTypes(accountId) {
