@@ -453,7 +453,7 @@ class LightspeedRetailApi {
 
     try {
       const response = await this.performRequest(options);
-      return response.data;
+      return response.data.RegisterCount;
     } catch (err) {
       return this.handleResponseError('POST CLOSE REGISTER METHOD', err);
     }
