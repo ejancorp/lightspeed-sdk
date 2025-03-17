@@ -436,7 +436,7 @@ class LightspeedRetailApi {
 
     try {
       const response = await this.performRequest(options);
-      return response.data;
+      return response.data.RegisterWithdraw;
     } catch (err) {
       return this.handleResponseError('POST OPEN REGISTER METHOD', err);
     }
