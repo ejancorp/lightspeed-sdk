@@ -149,8 +149,6 @@ class LightspeedRetailApi {
       this.tokenCacher.setToken(this.refreshToken, token)
     }
 
-    console.log(`Using token...... ${token}`);
-
     options.headers = { Authorization: `Bearer ${token}` };
 
     // Execute request
@@ -184,7 +182,6 @@ class LightspeedRetailApi {
 
     try {
       const response = await axios(options);
-      console.log(`Fresh New Token...`, { ...response.data })
       return response.data;
     } catch (err) {
       return this.handleResponseError('GET TOKEN', err);
