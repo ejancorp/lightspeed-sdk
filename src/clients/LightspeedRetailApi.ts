@@ -920,6 +920,22 @@ class LightspeedRetailApi {
     }
   }
 
+  async getRegisterCalculationById(accountId, registerId) {
+    const url = `https://api.lightspeedapp.com/API/V3/Account/${accountId}/Register/${registerId}/calculated.json`;
+
+    const options = {
+      method: 'GET',
+      url,
+    };
+
+    try {
+      const response = await this.performRequest(options);
+      return response.data.CalculatedAmount;
+    } catch (err) {
+      return this.handleResponseError('GET REGISTER CALCULATION', err);
+    }
+  }
+
   async getEmployeeById(accountId, employeeId) {
     const url = `https://api.lightspeedapp.com/API/Account/${accountId}/Employee/${employeeId}.json`;
 
